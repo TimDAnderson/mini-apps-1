@@ -41,12 +41,13 @@ var resetGame = function (tieVal, hardReset) {
   }
   //reset the window message
   if (hardReset) {
-    document.getElementById('windowStatus').innerText = "Player X Goes First";
     move = 0;
     tieTotalCount = 8;
     playerXtotal = 0;
     playerYtotal = 0;
     playCount = 0
+    document.getElementById('windowStatus').innerText = "Reset Detected";
+    setTimeout(()=>{document.getElementById('windowStatus').innerText = "Player X Goes First"}, 750);
     document.getElementById('Xtotal').innerText = `Win Total: ${playerXtotal}`;
     document.getElementById('Ytotal').innerText = `Win Total: ${playerYtotal}`;
     document.getElementById('playCount').innerText = `Total Play Count: 0`;

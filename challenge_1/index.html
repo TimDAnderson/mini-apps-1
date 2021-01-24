@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html>
+
+<head>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
 <body>
 
-
-<div>
-  <h1 style="margin-left: 60px">Tic Tac Toe</h1>
+<div class="gameBox">
+  <h1 class="title">Tic Tac Toe</h1>
   <h2 id="windowStatus">Player X Goes First</h2>
   <p id="playCount">Total Play Count: 0</p>
 
@@ -28,7 +32,7 @@
     <div class="child inline-block-child" id="Ytotal" style="display: inline-block">Win Total: 0</div><br><br>
   </div>
 
-  <div class="parent"></div>
+  <div class="parent">
     <div class="child inline-block-child" style="display: inline-block">
       <button id="theButton">Reset Game</button>
     </div>
@@ -36,24 +40,25 @@
   </div>
 
 
-
-  <table border="1" style="table-layout: fixed;margin-left: 80px">
-    <tr>
-      <th class="playSquare" id="1A" style="width:30px;height:30px"></th>
-      <th class="playSquare" id="1B"style="width:30px"></th>
-      <th class="playSquare" id="1C" style="width:30px"></th>
-    </tr>
-    <tr>
-      <th class="playSquare" id="2A" style="height:30px"></th>
-      <th class="playSquare" id="2B"></th>
-      <th class="playSquare" id="2C"></th>
-    </tr>
-    <tr>
-      <th class="playSquare" id="3A" style="height:30px"></th>
-      <th class="playSquare" id="3B"></th>
-      <th class="playSquare" id="3C"></th>
-    </tr>
-  </table>
+  <div>
+    <table border="1" style="table-layout: fixed;margin-left: 100px">
+      <tr>
+        <th class="playSquare" id="1A" style="width:30px;height:30px"></th>
+        <th class="playSquare" id="1B"style="width:30px"></th>
+        <th class="playSquare" id="1C" style="width:30px"></th>
+      </tr>
+      <tr>
+        <th class="playSquare" id="2A" style="height:30px"></th>
+        <th class="playSquare" id="2B"></th>
+        <th class="playSquare" id="2C"></th>
+      </tr>
+      <tr>
+        <th class="playSquare" id="3A" style="height:30px"></th>
+        <th class="playSquare" id="3B"></th>
+        <th class="playSquare" id="3C"></th>
+      </tr>
+    </table>
+  </div>
 </div>
 
 
