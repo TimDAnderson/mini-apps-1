@@ -8,6 +8,8 @@
     "start": "nodemon server.js"
   },
   "dependencies": {
+    "express-fileupload": "^1.2.1",
+    "fs": "0.0.1-security",
     "nodemon": "^2.0.7",
     "path": "^0.12.7",
     "underscore": "^1.12.0"

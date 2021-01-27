@@ -1,7 +1,9 @@
 const express = require('express')
+const fileUpload = require('express-fileupload');
 var path = require('path')
 const app = express()
 var _ = require('underscore');
+var fs = require('fs');
 
 //html template, idk where to put it for now
 var compiled = _.template(`
@@ -20,6 +22,20 @@ var compiled = _.template(`
         <input type="submit" value="submit">
       </form>
     </div>
+
+
+
+    <br>
+    <br>
+
+    <form action="http://localhost:3000/fileUpload" method="post" enctype="multipart/form-data">
+    Select JSON File to upload:
+    <input type="file" name="fileToUpload" id="fileToUpload">
+    <input type="submit" value="Upload file" name="submit">
+    </form>
+
+    <br>
+    <br>
 
 
 
@@ -55,11 +71,19 @@ var jsonConverter = (jsonObj) => {
 }
 
 
-
+// app.use(express.static(__dirname));
 app.use(express.static('./client'))
-app.use(express.urlencoded({
-  extended: true
-}))
+
+// app.use(express.urlencoded({
+//   extended: true
+// }))
+
+// app.use(fileUpload({
+//   useTempFiles : true,
+//   tempFileDir : '/tmp/'
+// }));
+
+app.use(fileUpload());
 
 app.get('/', function (req, res) {
   res.send('Hello World')
@@ -67,29 +91,52 @@ app.get('/', function (req, res) {
 
 app.post('/transformData', function (req, res) {
   console.log('transformData POST request received')
-  console.log(req.body.fname)
+  // console.log(req.body.fname)
   var obj = JSON.parse(req.body.fname);
-  //I have the json object, now what
-  //declare some type of csv variable
-
-  //firstName,lastName,county,city,role,sales
-
-  //recursively search through json obj and add nodes to csv
-    //build temp array with info
-      //join together into string, seperated by comma
-        //csv will be that 'string + \n'
-          //maybe reply with that, maybe put into file
-
-
-  //build one function that takes in 1 obj and returns csv string
   var csvString = jsonConverter(obj);
-  console.log('logging csv text')
-  console.log(csvString)
+  // console.log('logging csv text')
+  // console.log(csvString)
 
 
   //responding with template and csvData
     //I need to put the data into the template
   res.send(compiled({csvData: csvString}))
+})
+
+app.post('/fileUpload', function (req, res) {
+  console.log('got a file upload instead of copy/paste')
+  console.log('logging __dirname')
+  console.log(__dirname);
+
+  console.log(req.files.fileToUpload)
+
+
+  let jsonFile = req.files.fileToUpload
+  let uploadpath = __dirname + '/' + jsonFile.name;
+
+  jsonFile.mv(uploadpath, (err) => {
+    if (err) {
+      return res.status(500).send(err)
+    }
+    fs.readFile(uploadpath, 'utf8', (err, data) => {
+      if (err) {
+        console.log(err);
+      }
+
+      console.log(data);
+      console.log(typeof data)
+
+      var obj = JSON.parse(data);
+      console.log(obj);
+
+      let csvString = jsonConverter(obj);
+      res.send(compiled({csvData: csvString}))
+
+    })
+  })
+
+
+
 })
 
 app.listen(3000)

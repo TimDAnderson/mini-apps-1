@@ -14,6 +14,28 @@
     </form>
   </div>
 
+  <br>
+  <br>
+
+  <!-- <form action="http://localhost:3000/fileUpload" method="post">
+    <div>
+      <label for="file">Choose file to upload</label>
+      <input type="file" id="file" name="file" accept=".json">
+    </div>
+    <div>
+      <button>Submit</button>
+    </div>
+   </form> -->
+
+   <form action="http://localhost:3000/fileUpload" method="post" enctype="multipart/form-data">
+    Select JSON File to upload:
+    <input type="file" name="fileToUpload" id="fileToUpload">
+    <input type="submit" value="Upload file" name="submit">
+  </form>
+
+  <br>
+  <br>
+
   <textarea name="text1" cols="80" rows="10"></textarea>
 
 
