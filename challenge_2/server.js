@@ -21,10 +21,9 @@ var compiled = _.template(`
       </form>
     </div>
 
-    <p>
-      <%= csvData %>
 
-    </p>
+
+      <textarea name="text1" cols="80" rows="10"><%= csvData %></textarea>
 
 
     </body>
