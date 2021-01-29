@@ -1,0 +1,14 @@
+.leftBox {
+
+  float: left;
+  padding: 10px;
+  border: 2px solid red;
+}
+
+.rightBox {
+
+  float: right;
+
+  border: 2px solid red;
+  padding: 10px;
+}

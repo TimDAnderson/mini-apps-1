@@ -61,8 +61,10 @@ var jsonConverter = (jsonObj) => {
     returnString = returnString.concat('', tempstring);
     //for children nodes
     //pass child into recursive helper
-    for (var i = 0; i < node.children.length; i++) {
-      recursiveHelper(node.children[i]);
+    if (node.children) {
+      for (var i = 0; i < node.children.length; i++) {
+        recursiveHelper(node.children[i]);
+      }
     }
   }
   //pass node into recursive helper
@@ -74,9 +76,9 @@ var jsonConverter = (jsonObj) => {
 // app.use(express.static(__dirname));
 app.use(express.static('./client'))
 
-// app.use(express.urlencoded({
-//   extended: true
-// }))
+app.use(express.urlencoded({
+  extended: true
+}))
 
 // app.use(fileUpload({
 //   useTempFiles : true,
@@ -87,6 +89,18 @@ app.use(fileUpload());
 
 app.get('/', function (req, res) {
   res.send('Hello World')
+})
+
+app.post('/', function (req, res) {
+  let incomingJSON = req.body;
+  console.log(incomingJSON)
+  console.log(typeof incomingJSON);
+  let stringResponse = jsonConverter(incomingJSON)
+  // console.log(JSON.parse(req.body))
+
+
+
+  res.send(stringResponse)
 })
 
 app.post('/transformData', function (req, res) {
@@ -130,7 +144,8 @@ app.post('/fileUpload', function (req, res) {
       console.log(obj);
 
       let csvString = jsonConverter(obj);
-      res.send(compiled({csvData: csvString}))
+      // res.send(compiled({csvData: csvString}))
+      res.send(csvString);
 
     })
   })

@@ -1,45 +1,60 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+
   <body>
-    <h1>JSON to CSV App</h1>
-    <p>text</p>
-    <div>Hello World</div>
+    <h1>CSV-ify</h1>
+    <p>Turn your boring JSON data into totally not boring CSV data</p>
+    <!-- <div>Hello World</div> -->
 
 
-  <div>
-    <form action="http://localhost:3000/transformData" method="POST" target="_parent">
-      <label for="fname">JSON TEXT HERE</label><br>
-      <input type="text" id="fname" name="fname" value="Paste JSON in here"><br>
-      <input type="submit" value="Submit">
-    </form>
+
+  <div class="box">
+    <div class="leftBox">
+      <form action="http://localhost:3000/transformData" id="copyMethod" method="POST" target="_parent">
+        <label for="fname" >JSON TEXT HERE</label><br>
+        <textarea type="text" id="fname" name="fname" rows="50" cols="40">Paste your JSON data in this box OR use the upload option below</textarea>
+        <br>
+        <input type="submit" value="Submit copy/pasted text">
+      </form><br>
+      <div>
+        <form action="http://localhost:3000/fileUpload" id="fileUploadMethod" method="post" enctype="multipart/form-data">Or ->
+          <input type="file" name="fileToUpload" id="fileToUpload">
+          <input type="submit" value="Upload file" name="submit">
+        </form>
+      </div>
+    </div>
+
+    <div class="rightBox">
+      <label for="fname" >CSV TEXT HERE</label><br>
+      <textarea id="textArea" name="text1" cols="50" rows="25"></textarea>
+      <div>
+      <p>Configuration Options</p>
+      <div>
+        <form>
+          <label for="fname">Filter</label>
+  <input type="text" id="filter" name="filter"><br><br>
+        </form>
+      </div>
+      <div>
+        <label><input type="checkbox" name="checkbox" value="value">Display Children</label><br><br>
+      </div>
+      <button id="downloadButton">Download your CSV</button>
+    </div>
+
   </div>
 
-  <br>
-  <br>
 
-  <!-- <form action="http://localhost:3000/fileUpload" method="post">
-    <div>
-      <label for="file">Choose file to upload</label>
-      <input type="file" id="file" name="file" accept=".json">
-    </div>
-    <div>
-      <button>Submit</button>
-    </div>
-   </form> -->
 
-   <form action="http://localhost:3000/fileUpload" method="post" enctype="multipart/form-data">
-    Select JSON File to upload:
-    <input type="file" name="fileToUpload" id="fileToUpload">
-    <input type="submit" value="Upload file" name="submit">
-  </form>
 
-  <br>
-  <br>
-
-  <textarea name="text1" cols="80" rows="10"></textarea>
 
 
 
   </body>
-  <script></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- <script type="text/javascript" src="http://documentcloud.github.com/underscore/underscore-min.js"></script> -->
+  <script src="app.js"></script>
 </html>
