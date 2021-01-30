@@ -1,6 +1,8 @@
 console.log('hello');
 var csvDownloadData = '';
 var csvDownloadName = 'default';
+var filter = null;
+var displayChildren = true;
 
 
 //function to post to server
@@ -16,13 +18,12 @@ var fileSubmit = (file, successCb, failCb = null) => {
 }
 
 
-//file reader
+//file reader function //I would use this after refactoring
 var fileReader = () => {
 
 }
 
-//downloader
-
+//downloader function
 var download = (filename, text) => {
   var element = document.createElement('a');
   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -36,16 +37,12 @@ var download = (filename, text) => {
   document.body.removeChild(element);
 }
 
-
-//Event Handlres
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////Event Handlres//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
 $('#fileUploadMethod').on('submit', function (e) {
   e.preventDefault();
-  console.log('file upload clicked on')
-  console.log($('#fileUploadMethod'))
-  console.log($('#fileUploadMethod')['0'])
-  console.log($('#fileUploadMethod')['0']['0'].files[0]);
   let fileuploaded = $('#fileUploadMethod')['0']['0'].files[0]
-  console.log(fileuploaded.name);
   csvDownloadName = fileuploaded.name
 
   var reader = new FileReader();
@@ -54,11 +51,23 @@ $('#fileUploadMethod').on('submit', function (e) {
 
   reader.onload = function() {
     let data = reader.result
-    console.log(data)
-    console.log(typeof data)
     $("#fname").text(data);
     let obj = JSON.parse(data)
-    fileSubmit(obj, (data) => {
+    console.log(obj)
+    let sendObj = {
+      jsonData: obj,
+      filterOptions: {
+        display: displayChildren,
+        filter: filter
+      }
+    }
+    // console.log(sendObj)
+    // console.log('logging filter string')
+    // var filterString = $("#filter").value
+    // console.log(filterString);
+    //add stuff to obj before sending it
+
+    fileSubmit(sendObj, (data) => {
       console.log('in the success callback')
       console.log(data);
       csvDownloadData = data;
@@ -66,16 +75,12 @@ $('#fileUploadMethod').on('submit', function (e) {
 
     });
   };
-
-
-
-  // fileSubmit(formdata);
 })
 
 $('#copyMethod').on('submit', function (e) {
   e.preventDefault();
   console.log('copy paste form clicked on')
-  var jsoonData = $('#copyMethod')['0']['0'].value
+  var jsoonData = $('#copyMethod')['0']['0'].text
   console.log(jsoonData);
   let obj = JSON.parse(jsoonData)
   fileSubmit(obj, (data) => {

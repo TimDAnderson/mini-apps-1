@@ -51,13 +51,18 @@ var compiled = _.template(`
 
 //json converter.  Takes in object and returns csv string
 var jsonConverter = (jsonObj) => {
-  returnString = '';
+  let parentID = 0
+  let uniqID = 1
+  let returnString = '';
   // console.log(jsonObj);
   //recursive helper definition
   var recursiveHelper = (node) => {
     // declare temp string
     //pull information out of node
-    let tempstring = `${node.firstName},${node.lastName},${node.county},${node.city},${node.role},${node.sales}\n`;
+
+    let tempstring = `${uniqID},${node.firstName},${node.lastName},${node.county},${node.city},${node.role},${node.sales}\n`;
+    this.parentId = uniqID
+    uniqID++;
     returnString = returnString.concat('', tempstring);
     //for children nodes
     //pass child into recursive helper
@@ -95,7 +100,9 @@ app.post('/', function (req, res) {
   let incomingJSON = req.body;
   console.log(incomingJSON)
   console.log(typeof incomingJSON);
-  let stringResponse = jsonConverter(incomingJSON)
+  let filterObj = incomingJSON.filterOptions
+  let dataObj = incomingJSON.jsonData
+  let stringResponse = jsonConverter(dataObj, filterObj)
   // console.log(JSON.parse(req.body))
 
 
