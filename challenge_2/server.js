@@ -48,9 +48,38 @@ var compiled = _.template(`
   `);
 
 
+//DEPTH FIRST SEARCH
+// //json converter.  Takes in object and returns csv string
+// var jsonConverter = (jsonObj) => {
+//   let parentID = 0
+//   let uniqID = 1
+//   let returnString = '';
+//   // console.log(jsonObj);
+//   //recursive helper definition
+//   var recursiveHelper = (node) => {
+//     // declare temp string
+//     //pull information out of node
 
-//json converter.  Takes in object and returns csv string
-var jsonConverter = (jsonObj) => {
+//     let tempstring = `${uniqID},${node.firstName},${node.lastName},${node.county},${node.city},${node.role},${node.sales}\n`;
+//     this.parentId = uniqID
+//     uniqID++;
+//     returnString = returnString.concat('', tempstring);
+//     //for children nodes
+//     //pass child into recursive helper
+//     if (node.children) {
+//       for (var i = 0; i < node.children.length; i++) {
+//         recursiveHelper(node.children[i]);
+//       }
+//     }
+//   }
+//   //pass node into recursive helper
+//   recursiveHelper(jsonObj)
+//   return returnString;
+// }
+
+
+//BREADTH FIRST SEARCH
+var jsonConverter = (jsonObj, filter = null) => {
   let parentID = 0
   let uniqID = 1
   let returnString = '';

@@ -43,17 +43,23 @@ var download = (filename, text) => {
 $('#fileUploadMethod').on('submit', function (e) {
   e.preventDefault();
   let fileuploaded = $('#fileUploadMethod')['0']['0'].files[0]
+
+  //this is setting a global which is not ideal
   csvDownloadName = fileuploaded.name
 
-  var reader = new FileReader();
+
+  //this is for reading the .csv data
+  var reader = new FileReader();  //does this cause memory leaks?
 
   reader.readAsText(fileuploaded);
 
   reader.onload = function() {
     let data = reader.result
-    $("#fname").text(data);
+    $("#fname").text(data) //display the json data on page
     let obj = JSON.parse(data)
     console.log(obj)
+
+    //packaged for AJAX
     let sendObj = {
       jsonData: obj,
       filterOptions: {
@@ -61,21 +67,17 @@ $('#fileUploadMethod').on('submit', function (e) {
         filter: filter
       }
     }
-    // console.log(sendObj)
-    // console.log('logging filter string')
-    // var filterString = $("#filter").value
-    // console.log(filterString);
-    //add stuff to obj before sending it
 
+    //file submit is an AJAX POST
     fileSubmit(sendObj, (data) => {
-      console.log('in the success callback')
-      console.log(data);
-      csvDownloadData = data;
-      $("#textArea").text(data);
+      // csvDownloadData = data;  //setting another global
+      $("#textArea").text(data);  //display the cleaned up csv data
 
     });
   };
 })
+
+
 
 $('#copyMethod').on('submit', function (e) {
   e.preventDefault();
