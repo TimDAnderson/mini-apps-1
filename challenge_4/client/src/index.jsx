@@ -1,5 +1,6 @@
 import myFunc from './components/component1.jsx'
 
+//Stretch goal is to have this render underneath board, skipping for now
 var EndingMessage = props => {
   if (props.message) {
     return (
@@ -29,7 +30,7 @@ class App extends React.Component {
     }
   }
 
-  resetGame(message) {
+  resetGame() {
     //reset board
     this.setState({
       board: [
@@ -67,73 +68,95 @@ class App extends React.Component {
       for (let j = 0; j < board.length; j++) {
         columnArray.push(board[j][i])
       }
-      //check columnArray for winner - this will keep changing
-      let bCount = 0
-      let rCount = 0
-      for (let k = 0; k < columnArray.length; k++) {
-        if (columnArray[k] === 1) {
-          bCount++
-          rCount = 0
-        } else if (columnArray[k] === 2) {
-          bCount = 0
-          rCount++
-        }
-        if (bCount === 4) {
-          this.setState({ lastWinner: 'Black Won The Game'})
-          this.resetGame()
-        } else if (rCount === 4) {
-          this.setState({ lastWinner: 'Red Won The Game'})
-          this.resetGame()
-        }
-      }
+      this.checkArrayForWinner(columnArray)
     }
   }
 
 
   hasHorizontalWinner() {
-
     var board = this.state.board
     for (let i = 0; i < board.length; i++) {
-      let bCount = 0
-      let rCount = 0
-      for (let j = 0; j < board[i].length; j++) {
-        if (board[i][j] === 1) {
-          bCount++
-          rCount = 0
-        } else if (board[i][j] === 2) {
-          bCount = 0
-          rCount++
-        }
-        if (bCount === 4) {
-          this.setState({ lastWinner: 'Black Won The Game'})
-          this.resetGame()
-        } else if (rCount === 4) {
-          this.setState({ lastWinner: 'Red Won The Game'})
-          this.resetGame()
-        }
-      }
+      this.checkArrayForWinner(board[i])
     }
   }
 
   checkDiagonalWinner() {
     console.log('checking for a diag winner')
+    //check for major conflict along left edge
     let board = this.state.board
-    let step = 5
-    let coordinate = 0
-    let tempArray = []
-    while (step >= 0) {
-      tempArray.push(board[coordinate][coordinate])
-      step--
-      coordinate++
+    let checkNumber = 5
+    for (let i = 0; i < 6; i++) {
+      let step = checkNumber
+      let Xcoordinate = 0
+      let Ycoordinate = i
+      let tempArray = []
+      while (step >= 0) {
+        tempArray.push(board[Ycoordinate][Xcoordinate])
+        Ycoordinate++
+        Xcoordinate++
+        step--
+      }
+      checkNumber--
+      this.checkArrayForWinner(tempArray)
     }
-    console.log(tempArray)
+    //check for major conflict along top edge
+    checkNumber = 5
+    for (let i = 1; i < 7; i++) {
+      let step = checkNumber
+      let Xcoordinate = i
+      let Ycoordinate = 0
+      let tempArray = []
+      while (step >= 0) {
+        tempArray.push(board[Ycoordinate][Xcoordinate])
+        Ycoordinate++
+        Xcoordinate++
+        step--
+      }
+      checkNumber--
+      this.checkArrayForWinner(tempArray)
+    }
+    //check for minor conflicts along right edge
+    checkNumber = 5
+    for (let i = 0; i < 6; i++) {
+      let step = checkNumber
+      let Xcoordinate = 6
+      let Ycoordinate = i
+      let tempArray = []
+      while (step >= 0) {
+        tempArray.push(board[Ycoordinate][Xcoordinate])
+        Ycoordinate++
+        Xcoordinate--
+        step--
+      }
+      checkNumber--
+      this.checkArrayForWinner(tempArray)
+    }
+    //check for minor conflicts along top edge
+    checkNumber = 5
+    for (let i = 5; i >= 0; i--) {
+      let step = checkNumber
+      let Xcoordinate = i
+      let Ycoordinate = 0
+      let tempArray = []
+      while (step >= 0) {
+        tempArray.push(board[Ycoordinate][Xcoordinate])
+        Ycoordinate++
+        Xcoordinate--
+        step--
+      }
+      checkNumber--
+      this.checkArrayForWinner(tempArray)
+    }
+  }
+
+  checkArrayForWinner(array) {
     let bCount = 0
-      let rCount = 0
-    for (let j = 0; j < tempArray.length; j++) {
-      if (tempArray[j] === 1) {
+    let rCount = 0
+    for (let j = 0; j < array.length; j++) {
+      if (array[j] === 1) {
         bCount++
         rCount = 0
-      } else if (tempArray[j] === 2) {
+      } else if (array[j] === 2) {
         bCount = 0
         rCount++
       }
