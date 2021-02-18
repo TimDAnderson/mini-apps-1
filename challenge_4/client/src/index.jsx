@@ -42,7 +42,6 @@ class App extends React.Component {
         [0, 0, 0, 0, 0, 0, 0]
       ]
     })
-
   }
 
   checkForBoardLock() {
@@ -71,7 +70,6 @@ class App extends React.Component {
       this.checkArrayForWinner(columnArray)
     }
   }
-
 
   hasHorizontalWinner() {
     var board = this.state.board
@@ -170,101 +168,32 @@ class App extends React.Component {
     }
   }
 
-
+  //place a piece on the board
   handleClick(event) {
-    console.log('got a click')
-    // console.log(event.target.id)
     let index = Number(event.target.id[4])
-    //place the piece
     let board = this.state.board
-    // console.log(this.state.redsTurn)
-    if (board[5][index] === 0) {
-      if (this.state.redsTurn) {
-        board[5][index] = 2
-        this.setState({
-          redsTurn: false,
-          board
-        })
-      } else {
-        board[5][index] = 1
-        this.setState({
-          redsTurn: true,
-          board
-        })
-      }
-    } else if (board[4][index] === 0) {
-      if (this.state.redsTurn) {
-        board[4][index] = 2
-        this.setState({
-          redsTurn: false,
-          board
-        })
-      } else {
-        board[4][index] = 1
-        this.setState({
-          redsTurn: true,
-          board
-        })
-      }
-    } else if (board[3][index] === 0) {
-      if (this.state.redsTurn) {
-        board[3][index] = 2
-        this.setState({
-          redsTurn: false,
-          board
-        })
-      } else {
-        board[3][index] = 1
-        this.setState({
-          redsTurn: true,
-          board
-        })
-      }
-    } else if (board[2][index] === 0) {
-      if (this.state.redsTurn) {
-        board[2][index] = 2
-        this.setState({
-          redsTurn: false,
-          board
-        })
-      } else {
-        board[2][index] = 1
-        this.setState({
-          redsTurn: true,
-          board
-        })
-      }
-    } else if (board[1][index] === 0) {
-      if (this.state.redsTurn) {
-        board[1][index] = 2
-        this.setState({
-          redsTurn: false,
-          board
-        })
-      } else {
-        board[1][index] = 1
-        this.setState({
-          redsTurn: true,
-          board
-        })
-      }
-    } else if (board[0][index] === 0) {
-      if (this.state.redsTurn) {
-        board[0][index] = 2
-        this.setState({
-          redsTurn: false,
-          board
-        })
-      } else {
-        board[0][index] = 1
-        this.setState({
-          redsTurn: true,
-          board
-        })
+    for (let i = 5; i >=0; i--) {
+      console.log(i)
+      if (board[i][index] === 0) {
+        if (this.state.redsTurn) {
+          board[i][index] = 2
+          this.setState({
+            redsTurn: false,
+            board
+          })
+          break
+        } else {
+          board[i][index] = 1
+          this.setState({
+            redsTurn: true,
+            board
+          })
+          break
+        }
       }
     }
 
-    //post play checkers
+    //check for winners and board lock after each play
     this.hasVerticalWinner()
     this.hasHorizontalWinner()
     this.checkDiagonalWinner()
@@ -275,8 +204,8 @@ class App extends React.Component {
     console.log('component did mount')
   }
 
+  //the board render is not DRY, skipping for now
   render() {
-
 
     return (
       <div>
