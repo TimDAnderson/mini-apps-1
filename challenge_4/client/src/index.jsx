@@ -60,6 +60,7 @@ class App extends React.Component {
   }
 
   hasVerticalWinner() {
+    console.log('checking for vertical winner')
     let board = this.state.board
     for (let i = 0; i < board[0].length; i++) {
       let columnArray = []
@@ -90,6 +91,7 @@ class App extends React.Component {
 
 
   hasHorizontalWinner() {
+
     var board = this.state.board
     for (let i = 0; i < board.length; i++) {
       let bCount = 0
@@ -113,9 +115,41 @@ class App extends React.Component {
     }
   }
 
+  checkDiagonalWinner() {
+    console.log('checking for a diag winner')
+    let board = this.state.board
+    let step = 5
+    let coordinate = 0
+    let tempArray = []
+    while (step >= 0) {
+      tempArray.push(board[coordinate][coordinate])
+      step--
+      coordinate++
+    }
+    console.log(tempArray)
+    let bCount = 0
+      let rCount = 0
+    for (let j = 0; j < tempArray.length; j++) {
+      if (tempArray[j] === 1) {
+        bCount++
+        rCount = 0
+      } else if (tempArray[j] === 2) {
+        bCount = 0
+        rCount++
+      }
+      if (bCount === 4) {
+        this.setState({ lastWinner: 'Black Won The Game'})
+        this.resetGame()
+      } else if (rCount === 4) {
+        this.setState({ lastWinner: 'Red Won The Game'})
+        this.resetGame()
+      }
+    }
+  }
+
 
   handleClick(event) {
-    // console.log('got a click')
+    console.log('got a click')
     // console.log(event.target.id)
     let index = Number(event.target.id[4])
     //place the piece
@@ -206,13 +240,11 @@ class App extends React.Component {
         })
       }
     }
-    // console.log(this.state.board)
-    //check vertical winner
+
+    //post play checkers
     this.hasVerticalWinner()
-    //check for horizontal winner
     this.hasHorizontalWinner()
-    //check for diaganal winner
-    //check for tie
+    this.checkDiagonalWinner()
     this.checkForBoardLock()
   }
 
