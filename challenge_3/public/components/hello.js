@@ -1,0 +1,4 @@
+var myFunc = () => {
+  console.log('something');
+};
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL2NsaWVudC9jb21wb25lbnRzL2hlbGxvLmpzeCJdLCJuYW1lcyI6WyJteUZ1bmMiLCJjb25zb2xlIiwibG9nIl0sIm1hcHBpbmdzIjoiQUFBQSxJQUFJQSxNQUFNLEdBQUcsTUFBTTtBQUNqQkMsRUFBQUEsT0FBTyxDQUFDQyxHQUFSLENBQVksV0FBWjtBQUNELENBRkQiLCJzb3VyY2VzQ29udGVudCI6WyJ2YXIgbXlGdW5jID0gKCkgPT4ge1xuICBjb25zb2xlLmxvZygnc29tZXRoaW5nJylcbn0iXX0=

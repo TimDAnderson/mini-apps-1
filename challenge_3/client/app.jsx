@@ -1,5 +1,6 @@
-// import something from 'f1.js'
+myFunc()
 
+//confirm info component
 var ConfirmInfo = props => {
   console.log('on the confirmation page')
   return (
@@ -31,6 +32,7 @@ var ConfirmInfo = props => {
   )
 }
 
+//form 3 component
 var Form3 = props => {
   console.log('loading form 3')
   return (
@@ -55,7 +57,7 @@ var Form3 = props => {
   )
 }
 
-
+//form2 component
 var Form2 = props => {
   console.log('loading form 2')
   return (
@@ -86,13 +88,12 @@ var Form2 = props => {
   )
 }
 
-
+//form1 component
 var Form1 = props => {
   console.log('loading form 1')
   //F1 collects name, email, and password for account creation.co
   return (
     <div>
-
     <form onSubmit={props.handleNext}>
       <div>AccountCreation</div>
       <label>Name
@@ -110,6 +111,7 @@ var Form1 = props => {
   )
 }
 
+//checkout component
 var Checkout = props => {
   return (
     <div>
@@ -122,78 +124,83 @@ var Checkout = props => {
   )
 }
 
+//App, this state is source of truth
 class App extends React.Component {
   constructor(props) {
     super(props);
+    //starting with dummy data in state, no need to have blank
     this.state = {
+      dbTracker: null,
       page: 0,
-      name: 'Tim',
-      email: 'td@mail.com',
-      password: 'password',
-      address: '123 Alma',
-      line2: 'line2',
-      city: 'san jose',
-      state: 'ca',
-      zip: 95111,
-      phone: 1234567890,
-      ccNumber: 1234123412341234,
-      expirDate: '01/22',
-      cvv: 372,
-      billingZip: 95111
+      name: '',
+      email: '',
+      password: '',
+      address: '',
+      line2: '',
+      city: '',
+      state: '',
+      zip: '',
+      phone: '',
+      ccNumber: '',
+      expirDate: '',
+      cvv: '',
+      billingZip: ''
     }
   }
 
   handleNext(event) {
-    event.preventDefault()
+    if (event) {event.preventDefault()}
     let temp = this.state.page
-    console.log(`the current page is ${temp}`)
     temp++
-    console.log(temp)
-    this.setState({
-      page: temp
-    })
+    this.setState({ page: temp })
     console.log(`changing to ${temp}`)
-  }
-
-  completeCheckout(event) {
-    event.preventDefault()
-    //post request to server
     $.ajax({
       type: "POST",
       url: "http://localhost:3000",
       data: this.state
     })
       .done((returnVal)=>{
-        console.log("HELLO")
-        console.log(returnVal)
-        this.setState({
-          page: 0,
-          previous: returnVal
-        })
+        this.setState({ previous: returnVal })
       })
-      //gets saved on server
-    //reset client to initial blank state, ready to go again
+  }
+
+  completeCheckout(event) {
+    event.preventDefault()
+    this.handleNext()
+    this.setState({ page: 0 })
+    this.componentDidMount()
   }
 
   //1 source of truth tracking change through the application
   nameChange (event) { this.setState({name: event.target.value}) }
   emailChange (event) { this.setState({email: event.target.value}) }
   passwordChange (event) { this.setState({password: event.target.value}) }
-  addressChange (event) { this.setState({name: event.target.address}) }
-  line2Change (event) { this.setState({email: event.target.line2}) }
-  cityChange (event) { this.setState({password: event.target.city}) }
-  stateChange (event) { this.setState({name: event.target.state}) }
-  zipChange (event) { this.setState({email: event.target.zip}) }
-  phoneChange (event) { this.setState({password: event.target.phone}) }
-  ccNumberChange (event) { this.setState({ccNumber: event.target.city}) }
-  expirDateChange (event) { this.setState({expirDate: event.target.state}) }
-  cvvChange (event) { this.setState({cvv: event.target.zip}) }
-  billingZipChange (event) { this.setState({billingZip: event.target.phone}) }
+  addressChange (event) { this.setState({address: event.target.value}) }
+  line2Change (event) { this.setState({line2: event.target.value}) }
+  cityChange (event) { this.setState({city: event.target.value}) }
+  stateChange (event) { this.setState({state: event.target.value}) }
+  zipChange (event) { this.setState({zip: event.target.value}) }
+  phoneChange (event) { this.setState({phone: event.target.value}) }
+  ccNumberChange (event) { this.setState({ccNumber: event.target.value}) }
+  expirDateChange (event) { this.setState({expirDate: event.target.value}) }
+  cvvChange (event) { this.setState({cvv: event.target.value}) }
+  billingZipChange (event) { this.setState({billingZip: event.target.value}) }
 
+
+  //get a unique dbTracker ID and add it to this instance's state
   componentDidMount() {
-    console.log('component did mount')
+    console.log('componentdidmount')
+    $.ajax({
+      url: "http://localhost:3000/id"
+    })
+      .done((returnVal)=>{
+        let dbTracker = returnVal[returnVal.length - 1]._id
+        this.setState({ dbTracker })
+      })
   }
 
+
+  //render component based off of this.state.page
   render() {
     if (this.state.page === 0) {
       if (this.state.previous) {

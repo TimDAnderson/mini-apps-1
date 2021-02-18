@@ -26,9 +26,6 @@ const checkoutDocumentSchema = mongoose.Schema({
 const CheckoutDocument = mongoose.model('CheckoutDocument', checkoutDocumentSchema)
 
 var save = (accntInfoObj) => {
-  console.log('in the save function')
-  console.log(accntInfoObj)
-  console.log(accntInfoObj.name)
   let newCheckoutDocument = new CheckoutDocument({
     name: accntInfoObj.name,
     email: accntInfoObj.email,
@@ -45,14 +42,6 @@ var save = (accntInfoObj) => {
     billingZip: accntInfoObj.billingZip
   })
 
-
-  //create a document out of it
-
-  //do a find to check for duplicates
-
-  //if no duplicates then save to db
-
-
   return new Promise((resolve, reject)=>{
     newCheckoutDocument.save((err, newCheckoutDocument)=>{
       if (err) {
@@ -64,10 +53,21 @@ var save = (accntInfoObj) => {
           resolve(res)
         })
     })
-
   })
 }
 
-// save()
+var update = (accntInfoObj) =>{
+  return new Promise((resolve, reject)=>{
+    CheckoutDocument.findByIdAndUpdate({ _id : accntInfoObj.dbTracker}, accntInfoObj, {}, ()=>{
+      console.log('hello')
+      CheckoutDocument.find({})
+        .then((res)=>{
+          console.log(res)
+          resolve(res)
+        })
+    })
+  })
+}
 
 module.exports.save = save;
+module.exports.update = update
