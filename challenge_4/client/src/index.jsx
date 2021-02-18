@@ -157,6 +157,9 @@ class App extends React.Component {
       } else if (array[j] === 2) {
         bCount = 0
         rCount++
+      } else if (array[j] === 0) {
+        bCount = 0
+        rCount = 0
       }
       if (bCount === 4) {
         this.setState({ lastWinner: 'Black Won The Game'})
