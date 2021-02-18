@@ -1,20 +1,61 @@
 import myFunc from './components/component1.jsx'
 
+var EndingMessage = props => {
+  if (props.message) {
+    return (
+      <div>{props.message}</div>
+      )
+  } else {
+    return ( <div></div> )
+  }
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      lastWinner: null,
       black: 1,
       red: 2,
       redsTurn: true,
       board: [
         [0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0],
-        [1, 2, 2, 2, 2, 0, 0]
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0]
       ]
+    }
+  }
+
+  resetGame(message) {
+    //reset board
+    this.setState({
+      board: [
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0]
+      ]
+    })
+
+  }
+
+  checkForBoardLock() {
+    let board = this.state.board
+    let openPlays = 0
+    for (let i = 0; i < board.length; i++){
+      for (let j = 0; j < board.length; j++) {
+        if (board[i][j] === 0) {
+          openPlays++
+        }
+      }
+    } if (openPlays === 0) {
+      this.setState({ lastWinner: 'Board Lock detected, game restarted'})
+      this.resetGame()
     }
   }
 
@@ -26,8 +67,8 @@ class App extends React.Component {
         columnArray.push(board[j][i])
       }
       //check columnArray for winner - this will keep changing
-      bCount = 0
-      rCount = 0
+      let bCount = 0
+      let rCount = 0
       for (let k = 0; k < columnArray.length; k++) {
         if (columnArray[k] === 1) {
           bCount++
@@ -37,9 +78,11 @@ class App extends React.Component {
           rCount++
         }
         if (bCount === 4) {
-          return 'black wins'
+          this.setState({ lastWinner: 'Black Won The Game'})
+          this.resetGame()
         } else if (rCount === 4) {
-          return 'red wins'
+          this.setState({ lastWinner: 'Red Won The Game'})
+          this.resetGame()
         }
       }
     }
@@ -47,22 +90,24 @@ class App extends React.Component {
 
 
   hasHorizontalWinner() {
-    let board = this.state.board
+    var board = this.state.board
     for (let i = 0; i < board.length; i++) {
-      bCount = 0
-      rCount = 0
+      let bCount = 0
+      let rCount = 0
       for (let j = 0; j < board[i].length; j++) {
-        if (board[i[j]] === 1) {
+        if (board[i][j] === 1) {
           bCount++
           rCount = 0
-        } else if (board[i[j]] === 2) {
+        } else if (board[i][j] === 2) {
           bCount = 0
           rCount++
         }
         if (bCount === 4) {
-          return 'black wins'
+          this.setState({ lastWinner: 'Black Won The Game'})
+          this.resetGame()
         } else if (rCount === 4) {
-          return 'red wins'
+          this.setState({ lastWinner: 'Red Won The Game'})
+          this.resetGame()
         }
       }
     }
@@ -70,12 +115,12 @@ class App extends React.Component {
 
 
   handleClick(event) {
-    console.log('got a click')
-    console.log(event.target.id)
+    // console.log('got a click')
+    // console.log(event.target.id)
     let index = Number(event.target.id[4])
     //place the piece
     let board = this.state.board
-    console.log(this.state.redsTurn)
+    // console.log(this.state.redsTurn)
     if (board[5][index] === 0) {
       if (this.state.redsTurn) {
         board[5][index] = 2
@@ -161,7 +206,14 @@ class App extends React.Component {
         })
       }
     }
-    console.log(this.state.board)
+    // console.log(this.state.board)
+    //check vertical winner
+    this.hasVerticalWinner()
+    //check for horizontal winner
+    this.hasHorizontalWinner()
+    //check for diaganal winner
+    //check for tie
+    this.checkForBoardLock()
   }
 
   componentDidMount() {
@@ -169,72 +221,84 @@ class App extends React.Component {
   }
 
   render() {
+
+
     return (
+      <div>
+        <EndingMessage message={this.state.lastWinner}/>
+      <div>
       <table className="game-board">
-        <tr>
-          <th id="slot0" className="dropSlot" onClick={this.handleClick.bind(this)}>*</th>
-          <th id="slot1" className="dropSlot" onClick={this.handleClick.bind(this)}>*</th>
-          <th id="slot2" className="dropSlot" onClick={this.handleClick.bind(this)}>*</th>
-          <th id="slot3" className="dropSlot" onClick={this.handleClick.bind(this)}>*</th>
-          <th id="slot4" className="dropSlot" onClick={this.handleClick.bind(this)}>*</th>
-          <th id="slot5" className="dropSlot" onClick={this.handleClick.bind(this)}>*</th>
-          <th id="slot6" className="dropSlot" onClick={this.handleClick.bind(this)}>*</th>
-        </tr>
-        <tr>
-          <td className={`class${this.state.board[0][0]}`}>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-          <td className={`class${this.state.board[0][1]}`}>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-          <td className={`class${this.state.board[0][2]}`}>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-          <td className={`class${this.state.board[0][3]}`}>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-          <td className={`class${this.state.board[0][4]}`}>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-          <td className={`class${this.state.board[0][5]}`}>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-          <td className={`class${this.state.board[0][6]}`}>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-        </tr>
-        <tr>
-          <td className={`class${this.state.board[1][0]}`}>&nbsp;</td>
-          <td className={`class${this.state.board[1][1]}`}></td>
-          <td className={`class${this.state.board[1][2]}`}></td>
-          <td className={`class${this.state.board[1][3]}`}></td>
-          <td className={`class${this.state.board[1][4]}`}></td>
-          <td className={`class${this.state.board[1][5]}`}></td>
-          <td className={`class${this.state.board[1][6]}`}></td>
-        </tr>
-        <tr>
-          <td className={`class${this.state.board[2][0]}`}>&nbsp;</td>
-          <td className={`class${this.state.board[2][1]}`}></td>
-          <td className={`class${this.state.board[2][2]}`}></td>
-          <td className={`class${this.state.board[2][3]}`}></td>
-          <td className={`class${this.state.board[2][4]}`}></td>
-          <td className={`class${this.state.board[2][5]}`}></td>
-          <td className={`class${this.state.board[2][6]}`}></td>
-        </tr>
-        <tr>
-          <td className={`class${this.state.board[3][0]}`}>&nbsp;</td>
-          <td className={`class${this.state.board[3][1]}`}></td>
-          <td className={`class${this.state.board[3][2]}`}></td>
-          <td className={`class${this.state.board[3][3]}`}></td>
-          <td className={`class${this.state.board[3][4]}`}></td>
-          <td className={`class${this.state.board[3][5]}`}></td>
-          <td className={`class${this.state.board[3][6]}`}></td>
-        </tr>
-        <tr>
-          <td className={`class${this.state.board[4][0]}`}>&nbsp;</td>
-          <td className={`class${this.state.board[4][1]}`}></td>
-          <td className={`class${this.state.board[4][2]}`}></td>
-          <td className={`class${this.state.board[4][3]}`}></td>
-          <td className={`class${this.state.board[4][4]}`}></td>
-          <td className={`class${this.state.board[4][5]}`}></td>
-          <td className={`class${this.state.board[4][6]}`}></td>
-        </tr>
-        <tr>
-          <td className={`class${this.state.board[5][0]}`}>&nbsp;</td>
-          <td className={`class${this.state.board[5][1]}`}></td>
-          <td className={`class${this.state.board[5][2]}`}></td>
-          <td className={`class${this.state.board[5][3]}`}></td>
-          <td className={`class${this.state.board[5][4]}`}></td>
-          <td className={`class${this.state.board[5][5]}`}></td>
-          <td className={`class${this.state.board[5][6]}`}></td>
-        </tr>
+        <thead>
+          <tr>
+            <th id="slot0" className="dropSlot" onClick={this.handleClick.bind(this)}>*</th>
+            <th id="slot1" className="dropSlot" onClick={this.handleClick.bind(this)}>*</th>
+            <th id="slot2" className="dropSlot" onClick={this.handleClick.bind(this)}>*</th>
+            <th id="slot3" className="dropSlot" onClick={this.handleClick.bind(this)}>*</th>
+            <th id="slot4" className="dropSlot" onClick={this.handleClick.bind(this)}>*</th>
+            <th id="slot5" className="dropSlot" onClick={this.handleClick.bind(this)}>*</th>
+            <th id="slot6" className="dropSlot" onClick={this.handleClick.bind(this)}>*</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className={`class${this.state.board[0][0]}`}>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td className={`class${this.state.board[0][1]}`}>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td className={`class${this.state.board[0][2]}`}>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td className={`class${this.state.board[0][3]}`}>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td className={`class${this.state.board[0][4]}`}>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td className={`class${this.state.board[0][5]}`}>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td className={`class${this.state.board[0][6]}`}>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          </tr>
+          <tr>
+            <td className={`class${this.state.board[1][0]}`}>&nbsp;</td>
+            <td className={`class${this.state.board[1][1]}`}></td>
+            <td className={`class${this.state.board[1][2]}`}></td>
+            <td className={`class${this.state.board[1][3]}`}></td>
+            <td className={`class${this.state.board[1][4]}`}></td>
+            <td className={`class${this.state.board[1][5]}`}></td>
+            <td className={`class${this.state.board[1][6]}`}></td>
+          </tr>
+          <tr>
+            <td className={`class${this.state.board[2][0]}`}>&nbsp;</td>
+            <td className={`class${this.state.board[2][1]}`}></td>
+            <td className={`class${this.state.board[2][2]}`}></td>
+            <td className={`class${this.state.board[2][3]}`}></td>
+            <td className={`class${this.state.board[2][4]}`}></td>
+            <td className={`class${this.state.board[2][5]}`}></td>
+            <td className={`class${this.state.board[2][6]}`}></td>
+          </tr>
+          <tr>
+            <td className={`class${this.state.board[3][0]}`}>&nbsp;</td>
+            <td className={`class${this.state.board[3][1]}`}></td>
+            <td className={`class${this.state.board[3][2]}`}></td>
+            <td className={`class${this.state.board[3][3]}`}></td>
+            <td className={`class${this.state.board[3][4]}`}></td>
+            <td className={`class${this.state.board[3][5]}`}></td>
+            <td className={`class${this.state.board[3][6]}`}></td>
+          </tr>
+          <tr>
+            <td className={`class${this.state.board[4][0]}`}>&nbsp;</td>
+            <td className={`class${this.state.board[4][1]}`}></td>
+            <td className={`class${this.state.board[4][2]}`}></td>
+            <td className={`class${this.state.board[4][3]}`}></td>
+            <td className={`class${this.state.board[4][4]}`}></td>
+            <td className={`class${this.state.board[4][5]}`}></td>
+            <td className={`class${this.state.board[4][6]}`}></td>
+          </tr>
+          <tr>
+            <td className={`class${this.state.board[5][0]}`}>&nbsp;</td>
+            <td className={`class${this.state.board[5][1]}`}></td>
+            <td className={`class${this.state.board[5][2]}`}></td>
+            <td className={`class${this.state.board[5][3]}`}></td>
+            <td className={`class${this.state.board[5][4]}`}></td>
+            <td className={`class${this.state.board[5][5]}`}></td>
+            <td className={`class${this.state.board[5][6]}`}></td>
+          </tr>
+        </tbody>
       </table>
+      </div>
+
+      </div>
     )
   }
 }
