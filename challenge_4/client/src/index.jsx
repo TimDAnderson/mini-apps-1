@@ -1,6 +1,3 @@
-import myFunc from './components/component1.jsx'
-
-//Stretch goal is to have this render underneath board, skipping for now
 var EndingMessage = props => {
   if (props.message) {
     return (
@@ -19,19 +16,11 @@ class App extends React.Component {
       black: 1,
       red: 2,
       redsTurn: true,
-      board: [
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0]
-      ]
+      board: [[],[],[],[],[],[]]
     }
   }
 
   resetGame() {
-    //reset board
     this.setState({
       board: [
         [0, 0, 0, 0, 0, 0, 0],
@@ -79,7 +68,6 @@ class App extends React.Component {
   }
 
   checkDiagonalWinner() {
-    console.log('checking for a diag winner')
     //check for major conflict along left edge
     let board = this.state.board
     let checkNumber = 5
@@ -204,16 +192,19 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    console.log('component did mount')
+    //keeps the board definition of all 0's DRY
+    this.resetGame()
   }
 
   //the board render is not DRY, skipping for now
   render() {
 
+    let hello = <div>Have fun!</div>
+
     return (
       <div>
-        <EndingMessage message={this.state.lastWinner}/>
-      <div>
+        {hello}
+
       <table className="game-board">
         <thead>
           <tr>
@@ -283,9 +274,12 @@ class App extends React.Component {
           </tr>
         </tbody>
       </table>
+      <div>
+        <EndingMessage message={this.state.lastWinner}/>
+      </div>
       </div>
 
-      </div>
+
     )
   }
 }
