@@ -1,2 +1,6 @@
 # mini-apps-1
-This is a project I completed as a student at [hackreactor](http://hackreactor.com). This project was worked on with a pair.
+## These are 4 mini apps that I worked on by myself
+### 1. Tic Tac Toe
+### 2. CSV Report Generator
+### 3. Multi Step Checkout
+### 4. Connect Four
